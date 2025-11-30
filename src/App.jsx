@@ -14,11 +14,11 @@ const SaaSUNOLanding = () => {
   });
 
   const sealFreightImages = [
-    'seal1.jpg',
-    'seal2.jpg',
-    'seal3.jpg',
-    'seal4.jpg',
-    'seal5.jpg'
+    'seal1.PNG',
+    'seal2.PNG',
+    'seal3.PNG',
+    'seal4.PNG',
+    'seal5.PNG'
   ];
 
   // Fast loading simulation
