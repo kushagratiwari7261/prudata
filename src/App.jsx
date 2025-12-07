@@ -182,7 +182,7 @@ const SaaSUNOLanding = () => {
               </button>
             </div>
             <div className="hero-image">
-              <img src={`${process.env.PUBLIC_URL}/images/1.png`} alt="SaaS Platform" />
+              <img src="/images/1.png" alt="SaaS Platform" />
             </div>
           </div>
         </section>
@@ -243,7 +243,7 @@ const SaaSUNOLanding = () => {
                 </div>
               </div>
               <div className="workflow-image">
-                <img src={`${process.env.PUBLIC_URL}/images/7.png`} alt="Workflow Integration" />
+                <img src="/images/7.png" alt="Workflow Integration" />
               </div>
             </div>
           </div>
@@ -272,7 +272,7 @@ const SaaSUNOLanding = () => {
               </div>
             </div>
             <div className="process-image">
-              <img src={`${process.env.PUBLIC_URL}/images/2.png`} alt="Development Process" />
+              <img src="/images/2.png" alt="Development Process" />
             </div>
           </div>
         </section>
@@ -315,7 +315,7 @@ const SaaSUNOLanding = () => {
                         className="carousel-slide"
                       >
                         <img 
-                          src={`${process.env.PUBLIC_URL}/images/${image}`} 
+                          src={`/images/${image}`} 
                           alt={`Seal Freight Solution ${index + 1}`}
                         />
                       </div>
@@ -372,7 +372,7 @@ const SaaSUNOLanding = () => {
                 </ol>
               </div>
               <div className="action-image">
-                <img src={`${process.env.PUBLIC_URL}/images/5.png`} alt="Action Plan" />
+                <img src="/images/5.png" alt="Action Plan" />
               </div>
             </div>
           </div>
