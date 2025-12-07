@@ -190,7 +190,7 @@ body {
 .hero-image img {
   width: 100%;
   height: auto;
-  max-height: 500px;
+  max-height: 400px;
   object-fit: cover;
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
@@ -268,10 +268,122 @@ body {
   border-bottom: none;
 }
 
+/* What Makes SaasUNO Different Section */
+.differentiators {
+  padding: 120px 0;
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+  color: white;
+  position: relative;
+}
+
+.differentiators::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+}
+
+.differentiators h2 {
+  text-align: center;
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  margin-bottom: 4rem;
+  opacity: 0.8;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.differentiators-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.differentiator-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius);
+  padding: 2.5rem 2rem;
+  transition: var(--transition);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.differentiator-card:hover {
+  transform: translateY(-10px);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.differentiator-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  line-height: 1;
+}
+
+.differentiator-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: white;
+}
+
+.differentiator-card p {
+  margin-bottom: 2rem;
+  line-height: 1.7;
+  opacity: 0.9;
+  flex-grow: 1;
+}
+
+.differentiator-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+.stat {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+  color: white;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  display: block;
+}
+
 /* Workflow Section - Responsive */
 .workflow {
   padding: 120px 0;
-  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
   position: relative;
 }
 
@@ -335,7 +447,7 @@ body {
 .workflow-image img {
   width: 100%;
   height: auto;
-  max-height: 500px;
+  max-height: 550px;
   object-fit: cover;
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
@@ -875,7 +987,6 @@ body {
 }
 
 /* Loading Screen - Responsive */
-/* Loading Screen Styles */
 .loading-screen {
   position: fixed;
   top: 0;
@@ -1039,6 +1150,7 @@ body.loaded {
   overflow: auto;
   position: static;
 }
+
 /* Enhanced Responsive Design */
 @media (max-width: 1200px) {
   .container {
@@ -1064,6 +1176,10 @@ body.loaded {
   
   .carousel-container {
     height: 400px;
+  }
+  
+  .differentiators-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
 }
 
@@ -1122,6 +1238,7 @@ body.loaded {
   }
 
   .services,
+  .differentiators,
   .workflow,
   .process,
   .client-showcase,
@@ -1133,7 +1250,8 @@ body.loaded {
   .service-card,
   .feature,
   .step,
-  .result {
+  .result,
+  .differentiator-card {
     padding: 2rem 1.5rem;
   }
 
@@ -1155,6 +1273,15 @@ body.loaded {
   .footer-links {
     justify-content: center;
   }
+  
+  .differentiators-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .differentiator-stats {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1171,6 +1298,7 @@ body.loaded {
   }
 
   .services h2,
+  .differentiators h2,
   .workflow h2,
   .process h2,
   .client-showcase h2,
@@ -1182,7 +1310,8 @@ body.loaded {
 
   .services-grid,
   .process-steps,
-  .client-results {
+  .client-results,
+  .differentiators-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
@@ -1190,7 +1319,8 @@ body.loaded {
   .service-card,
   .feature,
   .step,
-  .result {
+  .result,
+  .differentiator-card {
     padding: 1.5rem 1rem;
   }
 
@@ -1236,6 +1366,18 @@ body.loaded {
   .footer-links {
     gap: 1.5rem;
   }
+  
+  .differentiator-icon {
+    font-size: 2rem;
+  }
+  
+  .differentiator-card h3 {
+    font-size: 1.3rem;
+  }
+  
+  .stat-value {
+    font-size: 1.3rem;
+  }
 }
 
 @media (max-width: 360px) {
@@ -1254,12 +1396,17 @@ body.loaded {
   .service-card,
   .feature,
   .step,
-  .result {
+  .result,
+  .differentiator-card {
     padding: 1rem 0.8rem;
   }
   
   .carousel-container {
     height: 200px;
+  }
+  
+  .differentiator-stats {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1269,7 +1416,8 @@ body.loaded {
   .feature:hover,
   .step:hover,
   .result:hover,
-  .carousel-btn:hover {
+  .carousel-btn:hover,
+  .differentiator-card:hover {
     transform: none;
   }
   
@@ -1303,6 +1451,7 @@ body.loaded {
   
   .hero,
   .services,
+  .differentiators,
   .workflow,
   .process,
   .client-showcase,
@@ -1316,4 +1465,61 @@ body.loaded {
   .container {
     max-width: 100%;
   }
+  
+  .differentiators {
+    background: white !important;
+  }
+  
+  .differentiator-card {
+    background: white !important;
+    color: black !important;
+    border: 1px solid #ddd !important;
+  }
+}
+/* Status Messages */
+.success-message {
+  background: #d1fae5;
+  color: #065f46;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  text-align: center;
+  border: 1px solid #a7f3d0;
+  animation: slideIn 0.3s ease-out;
+}
+
+.error-message {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  text-align: center;
+  border: 1px solid #fecaca;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Disabled input styles */
+.form-group input:disabled,
+.form-group textarea:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
 }
