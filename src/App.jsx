@@ -680,7 +680,7 @@ const SaaSUNOLandingPage = () => {
                   marginTop: '10px',
                   textAlign: 'center'
                 }}>
-                  Your information is secure and will be saved to our database
+                
                 </p>
               </form>
             </div>
@@ -707,7 +707,7 @@ const SaaSUNOLandingPage = () => {
             <div className="footer-bottom">
               <p>&copy; {new Date().getFullYear()} SaasUNO Technologies. All rights reserved.</p>
               <p style={{ fontSize: '12px', color: '#999', marginTop: '5px' }}>
-                Powered by React & MongoDB | Backend: Render.com
+                
               </p>
             </div>
           </div>
