@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './AdminDashboard.css';
 
 // API URL Configuration - Production optimized
-const API_URL = process.env.REACT_APP_API_URL || 'https://saasuno-backend.onrender.com/api';
+const API_URL = process.env.REACT_APP_API_URL || 'https://saasuno-backend.onrender.com';
 
 const AdminDashboard = () => {
   const [requests, setRequests] = useState([]);

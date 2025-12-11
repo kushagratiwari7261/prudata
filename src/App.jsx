@@ -6,7 +6,7 @@ import './App.css';
 import AdminDashboard from './components/AdminDashboard';
 
 // API URL Configuration - Production optimized
-const API_URL = process.env.REACT_APP_API_URL || 'https://saasuno-backend.onrender.com/api';
+const API_URL = process.env.REACT_APP_API_URL || 'https://saasuno-backend.onrender.com';
 
 console.log('🌐 API URL:', API_URL);
 console.log('🚀 Environment:', process.env.NODE_ENV);
