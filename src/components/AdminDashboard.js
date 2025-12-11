@@ -354,10 +354,10 @@ const AdminDashboard = () => {
             {loading ? ' Refreshing...' : ' Refresh'}
           </button>
           <button className="btn-export" onClick={exportToCSV}>
-            📥 Export CSV
+           Export CSV
           </button>
           <button className="btn-logout" onClick={logout}>
-            👋 Logout
+           Logout
           </button>
         </div>
       </header>
