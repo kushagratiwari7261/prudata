@@ -264,7 +264,8 @@ const SaaSUNOLandingPage = () => {
               <a href="#process" onClick={(e) => { e.preventDefault(); scrollToSection('process'); }}>Process</a>
               <a href="#clients" onClick={(e) => { e.preventDefault(); scrollToSection('clients'); }}>Clients</a>
               <a href="#contact" className="cta-button" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>Get Started</a>
-              <a href="/admin" className="admin-link">Admin</a>
+            
+
             </div>
             <div className="hamburger" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               <span></span>
@@ -340,7 +341,7 @@ const SaaSUNOLandingPage = () => {
             
             <div className="differentiators-grid">
               <div className="differentiator-card">
-                <div className="differentiator-icon">🔬</div>
+                <div className="differentiator-icon"></div>
                 <h3>End-to-End Research & Talent Orchestration</h3>
                 <p>
                   Unlike fragmented systems, our unified platform seamlessly integrates Research Management, 
@@ -359,7 +360,7 @@ const SaaSUNOLandingPage = () => {
               </div>
 
               <div className="differentiator-card">
-                <div className="differentiator-icon">🚀</div>
+                <div className="differentiator-icon"></div>
                 <h3>Comprehensive Startup & Investor Ecosystem</h3>
                 <p>
                   We provide a complete ecosystem connecting startups, investors, and accelerators through 
@@ -378,7 +379,7 @@ const SaaSUNOLandingPage = () => {
               </div>
 
               <div className="differentiator-card">
-                <div className="differentiator-icon">👥</div>
+                <div className="differentiator-icon"></div>
                 <h3>Dynamic Learning & Community Platform</h3>
                 <p>
                   Our platform creates thriving ecosystems by combining Learning Management, Community Engagement, 
@@ -564,7 +565,7 @@ const SaaSUNOLandingPage = () => {
                 marginBottom: '20px',
                 border: `1px solid ${formMessage.type === 'success' ? '#c3e6cb' : '#f5c6cb'}`
               }}>
-                {formMessage.type === 'success' ? '✅' : '❌'} {formMessage.text}
+                {formMessage.type === 'success' ? '' : ''} {formMessage.text}
               </div>
             )}
             
@@ -577,7 +578,7 @@ const SaaSUNOLandingPage = () => {
                 marginBottom: '20px',
                 border: '1px solid #c3e6cb'
               }}>
-                ✅ Thank you! Your request has been submitted successfully.
+                 Thank you! Your request has been submitted successfully.
               </div>
             )}
             
@@ -700,7 +701,7 @@ const SaaSUNOLandingPage = () => {
                 <a href="#workflow" onClick={(e) => { e.preventDefault(); scrollToSection('workflow'); }}>Solutions</a>
                 <a href="#process" onClick={(e) => { e.preventDefault(); scrollToSection('process'); }}>Process</a>
                 <a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>Contact</a>
-                <a href="/admin" style={{color: '#667eea'}}>Admin</a>
+               
               </div>
             </div>
             <div className="footer-bottom">
