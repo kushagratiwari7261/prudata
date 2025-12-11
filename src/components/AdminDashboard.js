@@ -44,7 +44,7 @@ const AdminDashboard = () => {
     e.preventDefault();
     
     // Simple password check - matches your backend ADMIN_TOKEN
-    const adminPassword = process.env.REACT_APP_ADMIN_PASSWORD || 'admin123';
+    const adminPassword = process.env.REACT_APP_ADMIN_PASSWORD || 'SaasUno@2025';
     
     if (password === adminPassword) {
       setIsAuthenticated(true);
