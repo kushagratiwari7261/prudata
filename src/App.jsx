@@ -898,7 +898,7 @@ const PrudataLandingPage = () => {
         <div className="loading-screen">
           <div className="loading-logo">
             <h1>Prudata</h1>
-            <div className="loading-subtitle">Digital Excellence Platform</div>
+            <div className="loading-subtitle">Where Ideas Meet Impact – Launch Smarter, Grow Faster</div>
           </div>
           <div className="spinner"></div>
           <div className="loading-progress">
