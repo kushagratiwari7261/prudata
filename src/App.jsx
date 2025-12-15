@@ -265,10 +265,31 @@ const PrudataLandingPage = () => {
         
         /* Updated Loading Screen - Black and White Theme */
         .loading-screen {
-          position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-          background: #000000; /* Pure black background */
-          display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;
-        }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: #000000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  text-align: center;
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.loading-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
         .loading-logo h1 {
           font-size: 3rem; font-weight: 800; margin-bottom: 10px; /* Reduced from 4rem */
           color: #ffffff; /* Pure white text */
@@ -897,7 +918,7 @@ const PrudataLandingPage = () => {
       {isLoading && (
         <div className="loading-screen">
           <div className="loading-logo">
-            <h1>Prudata</h1>
+            <h1>       Prudata</h1>
             <div className="loading-subtitle">Where Ideas Meet Impact – Launch Smarter, Grow Faster</div>
           </div>
           <div className="spinner"></div>
