@@ -87,6 +87,7 @@ const PrudataLandingPage = () => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [formMessage, setFormMessage] = useState({ type: '', text: '' });
   const [visibleSections, setVisibleSections] = useState(new Set());
+    const [visitorCount, setVisitorCount] = useState(null);
 
   const sectionRefs = useRef({});
   // Added seal1 to seal8 images
@@ -145,6 +146,32 @@ const PrudataLandingPage = () => {
     handleScroll(); // Initial check
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+    useEffect(() => {
+    const fetchVisitorCount = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/visitors/count`);
+        if (response.ok) {
+          const data = await response.json();
+          setVisitorCount(data.count || 1024);
+        }
+      } catch (error) {
+        console.error('Error fetching visitor count:', error);
+        // Fallback to a static number if API fails
+        setVisitorCount(1024);
+      }
+    };
+
+    if (!isLoading) {
+      fetchVisitorCount();
+      
+      // Increment visitor count on page view
+      fetch(`${API_URL}/api/visitors/increment`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ page: 'landing-page' })
+      }).catch(err => console.error('Error incrementing visitor count:', err));
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     let progress = 0;
@@ -1528,11 +1555,40 @@ const PrudataLandingPage = () => {
                   <a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>Contact</a>
                 </div>
               </div>
-              <div className="footer-bottom">
+                          <div className="footer-bottom">
                 <p>&copy; {new Date().getFullYear()} Prudata Technologies Private Limited. All rights reserved. | Privacy Policy | Terms of Service</p>
                 <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', marginTop: '8px' }}>
                   ISO 27001 Certified | GDPR Compliant | SOC 2 Type II Certified
                 </p>
+                
+                {/* Visitor Counter */}
+                <div style={{ 
+                  marginTop: '15px', 
+                  padding: '8px 15px', 
+                  backgroundColor: 'rgba(255,255,255,0.05)', 
+                  borderRadius: '8px',
+                  display: 'inline-block'
+                }}>
+                  <span style={{ 
+                    color: 'rgba(255,255,255,0.6)', 
+                    fontSize: '0.85rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{ opacity: 0.7 }}>
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+                    </svg>
+                    Total Visitors: 
+                    <span style={{ 
+                      color: '#ffffff', 
+                      fontWeight: '600',
+                      marginLeft: '3px'
+                    }}>
+                      {visitorCount !== null ? visitorCount.toLocaleString() : '...'}
+                    </span>
+                  </span>
+                </div>
               </div>
             </div>
           </footer>
