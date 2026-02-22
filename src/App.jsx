@@ -1603,6 +1603,7 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/logi" element={<Navigate to="https://seal-freight.vercel.app/" replace />} />
         <Route path="/*" element={<PrudataLandingPage />} />
       </Routes>
     </Router>
