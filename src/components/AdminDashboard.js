@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './AdminDashboard.css';
 
 // API URL Configuration - Production optimized
@@ -28,41 +28,56 @@ const AdminDashboard = () => {
   const [password, setPassword] = useState('');
   const [authToken, setAuthToken] = useState('');
 
-  // Check if already authenticated
-  useEffect(() => {
-    const auth = localStorage.getItem('admin_auth');
-    const token = localStorage.getItem('admin_token');
+  const updateStats = useCallback((contactsList) => {
+    const total = contactsList.length;
+    const pending = contactsList.filter(r => r.status === 'pending').length;
+    const contacted = contactsList.filter(r => r.status === 'contacted').length;
+    const rejected = contactsList.filter(r => r.status === 'rejected').length;
     
-    if (auth === 'true' && token) {
-      setIsAuthenticated(true);
-      setAuthToken(token);
-      fetchContacts();
-    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayCount = contactsList.filter(r => 
+      new Date(r.createdAt) >= today
+    ).length;
+    
+    setStats({ total, pending, contacted, rejected, today: todayCount });
   }, []);
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+  const loadDemoData = useCallback(() => {
+    const demoData = [
+      {
+        _id: '1',
+        name: 'John Doe',
+        email: 'john@example.com',
+        phone: '+1234567890',
+        company: 'Tech Corp',
+        message: 'Interested in SaaS development services.',
+        createdAt: new Date().toISOString(),
+        status: 'pending',
+        notes: ''
+      },
+      {
+        _id: '2',
+        name: 'Jane Smith',
+        email: 'jane@example.com',
+        phone: '+0987654321',
+        company: 'Startup Inc',
+        message: 'Looking for digital transformation consultation.',
+        createdAt: new Date(Date.now() - 86400000).toISOString(),
+        status: 'contacted',
+        notes: 'Called customer, scheduled follow-up'
+      }
+    ];
     
-    // Simple password check - matches your backend ADMIN_TOKEN
-    const adminPassword = process.env.REACT_APP_ADMIN_PASSWORD || 'SaasUno@2025';
-    
-    if (password === adminPassword) {
-      setIsAuthenticated(true);
-      setAuthToken('SaasUno@2025');
-      localStorage.setItem('admin_auth', 'true');
-      localStorage.setItem('admin_token', 'SaasUno@2025');
-      fetchContacts();
-    } else {
-      setError('Invalid password.');
-    }
-  };
+    setRequests(demoData);
+    updateStats(demoData);
+  }, [updateStats]);
 
-  const fetchContacts = async () => {
+  const fetchContacts = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
       
-      // FIXED: Added /api prefix
       const response = await fetch(`${API_URL}/api/admin/contacts`, {
         headers: {
           'Authorization': `Bearer ${authToken || 'SaasUno@2025'}`
@@ -101,56 +116,43 @@ const AdminDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [authToken, loadDemoData, updateStats]);
 
-  const loadDemoData = () => {
-    const demoData = [
-      {
-        _id: '1',
-        name: 'John Doe',
-        email: 'john@example.com',
-        phone: '+1234567890',
-        company: 'Tech Corp',
-        message: 'Interested in SaaS development services.',
-        createdAt: new Date().toISOString(),
-        status: 'pending',
-        notes: ''
-      },
-      {
-        _id: '2',
-        name: 'Jane Smith',
-        email: 'jane@example.com',
-        phone: '+0987654321',
-        company: 'Startup Inc',
-        message: 'Looking for digital transformation consultation.',
-        createdAt: new Date(Date.now() - 86400000).toISOString(),
-        status: 'contacted',
-        notes: 'Called customer, scheduled follow-up'
-      }
-    ];
+  // Check if already authenticated
+  useEffect(() => {
+    const auth = localStorage.getItem('admin_auth');
+    const token = localStorage.getItem('admin_token');
     
-    setRequests(demoData);
-    updateStats(demoData);
-  };
+    if (auth === 'true' && token) {
+      setIsAuthenticated(true);
+      setAuthToken(token);
+    }
+  }, []);
 
-  const updateStats = (contactsList) => {
-    const total = contactsList.length;
-    const pending = contactsList.filter(r => r.status === 'pending').length;
-    const contacted = contactsList.filter(r => r.status === 'contacted').length;
-    const rejected = contactsList.filter(r => r.status === 'rejected').length;
+  useEffect(() => {
+    if (isAuthenticated && authToken) {
+      fetchContacts();
+    }
+  }, [isAuthenticated, authToken, fetchContacts]);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
     
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const todayCount = contactsList.filter(r => 
-      new Date(r.createdAt) >= today
-    ).length;
+    // Simple password check - matches your backend ADMIN_TOKEN
+    const adminPassword = process.env.REACT_APP_ADMIN_PASSWORD || 'SaasUno@2025';
     
-    setStats({ total, pending, contacted, rejected, today: todayCount });
+    if (password === adminPassword) {
+      setIsAuthenticated(true);
+      setAuthToken('SaasUno@2025');
+      localStorage.setItem('admin_auth', 'true');
+      localStorage.setItem('admin_token', 'SaasUno@2025');
+    } else {
+      setError('Invalid password.');
+    }
   };
 
   const updateContactStatus = async (id, newStatus, notes = '') => {
     try {
-      // FIXED: Added /api prefix
       const response = await fetch(`${API_URL}/api/admin/contacts/${id}`, {
         method: 'PATCH',
         headers: {
@@ -178,26 +180,34 @@ const AdminDashboard = () => {
         );
         
         // Update stats
-        setStats(prevStats => ({
-          ...prevStats,
-          pending: newStatus === 'pending' ? prevStats.pending + 1 : 
-                  (prevStats.pending > 0 ? prevStats.pending - 1 : 0),
-          contacted: newStatus === 'contacted' ? prevStats.contacted + 1 : 
-                    (prevStats.contacted > 0 ? prevStats.contacted - 1 : 0),
-          rejected: newStatus === 'rejected' ? prevStats.rejected + 1 : 
-                   (prevStats.rejected > 0 ? prevStats.rejected - 1 : 0)
-        }));
+        setStats(prevStats => {
+          const oldStatus = requests.find(r => r._id === id)?.status;
+          
+          // Decrement old status count
+          let updates = { ...prevStats };
+          
+          if (oldStatus === 'pending') updates.pending = Math.max(0, updates.pending - 1);
+          else if (oldStatus === 'contacted') updates.contacted = Math.max(0, updates.contacted - 1);
+          else if (oldStatus === 'rejected') updates.rejected = Math.max(0, updates.rejected - 1);
+          
+          // Increment new status count
+          if (newStatus === 'pending') updates.pending += 1;
+          else if (newStatus === 'contacted') updates.contacted += 1;
+          else if (newStatus === 'rejected') updates.rejected += 1;
+          
+          return updates;
+        });
         
         setSelectedRequest(null);
         setAdminNotes('');
         
-        alert(` Status updated to ${newStatus}`);
+        alert(`✅ Status updated to ${newStatus}`);
       } else {
         throw new Error('Update failed');
       }
     } catch (error) {
       console.error('Update error:', error);
-      alert(' Failed to update status.');
+      alert('❌ Failed to update status.');
     }
   };
 
@@ -207,7 +217,6 @@ const AdminDashboard = () => {
     }
     
     try {
-      // FIXED: Added /api prefix
       const response = await fetch(`${API_URL}/api/admin/contacts/${id}`, {
         method: 'DELETE',
         headers: {
@@ -216,15 +225,18 @@ const AdminDashboard = () => {
       });
       
       if (response.ok) {
-        setRequests(prevRequests => prevRequests.filter(r => r._id !== id));
-        updateStats(requests.filter(r => r._id !== id));
-        alert(' Contact deleted successfully');
+        setRequests(prevRequests => {
+          const updated = prevRequests.filter(r => r._id !== id);
+          updateStats(updated);
+          return updated;
+        });
+        alert('✅ Contact deleted successfully');
       } else {
         throw new Error('Delete failed');
       }
     } catch (error) {
       console.error('Delete error:', error);
-      alert(' Failed to delete contact.');
+      alert('❌ Failed to delete contact.');
     }
   };
 
@@ -233,13 +245,13 @@ const AdminDashboard = () => {
     const csvContent = [
       headers.join(','),
       ...requests.map(request => [
-        `"${request.name.replace(/"/g, '""')}"`,
-        request.email,
+        `"${request.name?.replace(/"/g, '""') || ''}"`,
+        request.email || '',
         request.phone || 'N/A',
-        `"${request.company.replace(/"/g, '""')}"`,
-        `"${request.message.replace(/"/g, '""')}"`,
-        request.status,
-        new Date(request.createdAt).toLocaleString(),
+        `"${request.company?.replace(/"/g, '""') || ''}"`,
+        `"${request.message?.replace(/"/g, '""') || ''}"`,
+        request.status || 'pending',
+        request.createdAt ? new Date(request.createdAt).toLocaleString() : '',
         `"${(request.notes || '').replace(/"/g, '""')}"`
       ].join(','))
     ].join('\n');
@@ -265,17 +277,22 @@ const AdminDashboard = () => {
       const today = new Date();
       
       switch(filters.dateRange) {
-        case 'today':
+        case 'today': {
           const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
           if (requestDate < startOfToday) return false;
           break;
-        case 'week':
+        }
+        case 'week': {
           const oneWeekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
           if (requestDate < oneWeekAgo) return false;
           break;
-        case 'month':
+        }
+        case 'month': {
           const oneMonthAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
           if (requestDate < oneMonthAgo) return false;
+          break;
+        }
+        default:
           break;
       }
     }
@@ -284,10 +301,10 @@ const AdminDashboard = () => {
     if (filters.search) {
       const searchLower = filters.search.toLowerCase();
       return (
-        request.name.toLowerCase().includes(searchLower) ||
-        request.email.toLowerCase().includes(searchLower) ||
-        request.company.toLowerCase().includes(searchLower) ||
-        request.message.toLowerCase().includes(searchLower)
+        request.name?.toLowerCase().includes(searchLower) ||
+        request.email?.toLowerCase().includes(searchLower) ||
+        request.company?.toLowerCase().includes(searchLower) ||
+        request.message?.toLowerCase().includes(searchLower)
       );
     }
     
@@ -313,8 +330,8 @@ const AdminDashboard = () => {
     return (
       <div className="admin-login">
         <div className="login-container">
-          <h2> Pssword Dall Re</h2>
-          <p className="login-subtitle">Boll Khul ja Sim Sim✨</p>
+          <h2>🔐 Password Dall Re</h2>
+          <p className="login-subtitle">Boll Khul Ja Sim Sim✨</p>
           
           <form onSubmit={handleLogin}>
             <div className="form-group">
@@ -342,34 +359,33 @@ const AdminDashboard = () => {
       {/* Header */}
       <header className="admin-header">
         <div className="header-actions">
-  {/* Add this new button */}
-  <button 
-    className="btn-email-system"
-    onClick={() => window.open('https://prudata-mail.onrender.com/', '_blank')}
-  >
-    📧 Email System
-  </button>
-  
-  <button 
-    className="btn-refresh" 
-    onClick={fetchContacts} 
-    disabled={loading}
-  >
-    {loading ? ' 🔄 Refreshing...' : ' 🔄 Refresh'}
-  </button>
-  <button className="btn-export" onClick={exportToCSV}>
-    📥 Export CSV
-  </button>
-  <button className="btn-logout" onClick={logout}>
-    🚪 Logout
-  </button>
-</div>
+          <button 
+            className="btn-email-system"
+            onClick={() => window.open('https://prudata-mail.onrender.com/', '_blank')}
+          >
+            📧 Email System
+          </button>
+          
+          <button 
+            className="btn-refresh" 
+            onClick={fetchContacts} 
+            disabled={loading}
+          >
+            {loading ? ' 🔄 Refreshing...' : ' 🔄 Refresh'}
+          </button>
+          <button className="btn-export" onClick={exportToCSV}>
+            📥 Export CSV
+          </button>
+          <button className="btn-logout" onClick={logout}>
+            🚪 Logout
+          </button>
+        </div>
       </header>
 
       {/* Stats Cards */}
       <div className="stats-container">
         <div className="stat-card total">
-          <div className="stat-icon"></div>
+          <div className="stat-icon">📊</div>
           <div className="stat-content">
             <div className="stat-value">{stats.total}</div>
             <div className="stat-label">Total</div>
@@ -385,7 +401,7 @@ const AdminDashboard = () => {
         </div>
         
         <div className="stat-card contacted">
-          <div className="stat-icon"></div>
+          <div className="stat-icon">✅</div>
           <div className="stat-content">
             <div className="stat-value">{stats.contacted}</div>
             <div className="stat-label">Contacted</div>
@@ -393,7 +409,7 @@ const AdminDashboard = () => {
         </div>
         
         <div className="stat-card rejected">
-          <div className="stat-icon"></div>
+          <div className="stat-icon">❌</div>
           <div className="stat-content">
             <div className="stat-value">{stats.rejected}</div>
             <div className="stat-label">Rejected</div>
@@ -401,7 +417,7 @@ const AdminDashboard = () => {
         </div>
         
         <div className="stat-card today">
-          <div className="stat-icon"></div>
+          <div className="stat-icon">📅</div>
           <div className="stat-content">
             <div className="stat-value">{stats.today}</div>
             <div className="stat-label">Today</div>
@@ -490,7 +506,7 @@ const AdminDashboard = () => {
                     <td className="company-cell">{request.company}</td>
                     <td className="message-cell">
                       <div className="message-preview">
-                        {request.message.length > 100 
+                        {request.message && request.message.length > 100 
                           ? `${request.message.substring(0, 100)}...` 
                           : request.message}
                       </div>
@@ -514,7 +530,7 @@ const AdminDashboard = () => {
                             setAdminNotes(request.notes || '');
                           }}
                         >
-                           View
+                          👁️ View
                         </button>
                         
                         {request.status === 'pending' && (
@@ -523,13 +539,13 @@ const AdminDashboard = () => {
                               className="btn-contact"
                               onClick={() => updateContactStatus(request._id, 'contacted')}
                             >
-                              Contacted
+                              ✅ Contacted
                             </button>
                             <button 
                               className="btn-reject"
                               onClick={() => updateContactStatus(request._id, 'rejected')}
                             >
-                               Reject
+                              ❌ Reject
                             </button>
                           </>
                         )}
@@ -642,7 +658,7 @@ const AdminDashboard = () => {
                 }}
                 disabled={selectedRequest.status === 'contacted'}
               >
-                Mark as Contacted
+                ✅ Mark as Contacted
               </button>
               
               <button 
@@ -652,7 +668,7 @@ const AdminDashboard = () => {
                 }}
                 disabled={selectedRequest.status === 'rejected'}
               >
-                 Mark as Rejected
+                ❌ Mark as Rejected
               </button>
               
               <button 
