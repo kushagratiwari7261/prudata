@@ -1,7 +1,44 @@
-import React, { useState, useEffect, useRef } from 'ract';
-import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AdminDashboard from './components/AdminDashboard';
+
 const API_URL = process.env.REACT_APP_API_URL || 'https://saasuno-backend.onrender.com';
+
+// ExternalRedirect Component - Add this right after imports
+const ExternalRedirect = ({ to }) => {
+  useEffect(() => {
+    window.location.href = to;
+  }, [to]);
+
+  return (
+    <div style={{ 
+      background: '#0a0a0f', 
+      color: '#fff', 
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'column',
+      gap: '20px'
+    }}>
+      <div className="spinner" style={{
+        width: '50px',
+        height: '50px',
+        border: '3px solid rgba(255,255,255,0.2)',
+        borderTop: '3px solid #fff',
+        borderRadius: '50%',
+        animation: 'spin 1s linear infinite'
+      }}></div>
+      <p>Redirecting to Seal Freight...</p>
+      <style>{`
+        @keyframes spin { 
+          from { transform: rotate(0deg); } 
+          to { transform: rotate(360deg); } 
+        }
+      `}</style>
+    </div>
+  );
+};
 
 // SVG Icons Component
 const SVGIcon = ({ name, className = "", style = {} }) => {
@@ -73,8 +110,6 @@ const SVGIcon = ({ name, className = "", style = {} }) => {
   return icons[name] || null;
 };
 
-
-
 const PrudataLandingPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -86,7 +121,7 @@ const PrudataLandingPage = () => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [formMessage, setFormMessage] = useState({ type: '', text: '' });
   const [visibleSections, setVisibleSections] = useState(new Set());
-    const [visitorCount, setVisitorCount] = useState(null);
+  const [visitorCount, setVisitorCount] = useState(null);
 
   const sectionRefs = useRef({});
   // Added seal1 to seal8 images
@@ -145,7 +180,8 @@ const PrudataLandingPage = () => {
     handleScroll(); // Initial check
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-    useEffect(() => {
+  
+  useEffect(() => {
     const fetchVisitorCount = async () => {
       try {
         const response = await fetch(`${API_URL}/api/visitors/count`);
@@ -289,111 +325,112 @@ const PrudataLandingPage = () => {
         @keyframes slideInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
         
-   /* Updated Loading Screen - Black and White Theme */
-.loading-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background: #000000;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  text-align: center;
-  color: white;
-  padding: 20px;
-  box-sizing: border-box;
-}
+        /* Updated Loading Screen - Black and White Theme */
+        .loading-screen {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100vh;
+          background: #000000;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          z-index: 9999;
+          text-align: center;
+          color: white;
+          padding: 20px;
+          box-sizing: border-box;
+        }
 
-.loading-logo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 40px;
-  text-align: center;
-}
+        .loading-logo {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-bottom: 40px;
+          text-align: center;
+        }
 
-.logo-container {
-  margin-bottom: 25px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+        .logo-container {
+          margin-bottom: 25px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
 
-.loading-logo-image {
-  width: 150px;
-  height: 150px;
-  object-fit: contain;
-  animation: pulse 2s ease-in-out infinite;
-  filter: brightness(1.1) contrast(1.1); /* Makes logo stand out on black background */
-}
+        .loading-logo-image {
+          width: 150px;
+          height: 150px;
+          object-fit: contain;
+          animation: pulse 2s ease-in-out infinite;
+          filter: brightness(1.1) contrast(1.1);
+        }
 
-@keyframes pulse {
-  0%, 100% { 
-    transform: scale(1); 
-    opacity: 1; 
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
-  }
-  50% { 
-    transform: scale(1.05); 
-    opacity: 0.9; 
-    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
-  }
-}
+        @keyframes pulse {
+          0%, 100% { 
+            transform: scale(1); 
+            opacity: 1; 
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+          }
+          50% { 
+            transform: scale(1.05); 
+            opacity: 0.9; 
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
+          }
+        }
 
-.loading-logo h1 {
-  font-size: 3rem;
-  font-weight: 800;
-  margin-bottom: 10px;
-  color: #ffffff;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-}
+        .loading-logo h1 {
+          font-size: 3rem;
+          font-weight: 800;
+          margin-bottom: 10px;
+          color: #ffffff;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
 
-.loading-subtitle { 
-  font-size: 1.1rem;
-  color: #ffffff;
-  margin-bottom: 40px;
-  opacity: 0.8;
-}
+        .loading-subtitle { 
+          font-size: 1.1rem;
+          color: #ffffff;
+          margin-bottom: 40px;
+          opacity: 0.8;
+        }
 
-.spinner {
-  width: 60px;
-  height: 60px;
-  border: 3px solid rgba(255,255,255,0.2);
-  border-top: 3px solid #ffffff;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 25px;
-}
+        .spinner {
+          width: 60px;
+          height: 60px;
+          border: 3px solid rgba(255,255,255,0.2);
+          border-top: 3px solid #ffffff;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin-bottom: 25px;
+        }
 
-.loading-progress {
-  width: 250px;
-  height: 3px;
-  background: rgba(255,255,255,0.2);
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: 15px;
-}
+        .loading-progress {
+          width: 250px;
+          height: 3px;
+          background: rgba(255,255,255,0.2);
+          border-radius: 2px;
+          overflow: hidden;
+          margin-bottom: 15px;
+        }
 
-.loading-progress-bar {
-  height: 100%;
-  background: linear-gradient(90deg, #ffffff, #cccccc);
-  transition: width 0.3s ease;
-}
+        .loading-progress-bar {
+          height: 100%;
+          background: linear-gradient(90deg, #ffffff, #cccccc);
+          transition: width 0.3s ease;
+        }
 
-.loading-percentage { 
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #ffffff;
-}
+        .loading-percentage { 
+          font-size: 1.3rem;
+          font-weight: 600;
+          color: #ffffff;
+        }
 
-@keyframes spin { 
-  from { transform: rotate(0deg); } 
-  to { transform: rotate(360deg); } 
-}
+        @keyframes spin { 
+          from { transform: rotate(0deg); } 
+          to { transform: rotate(360deg); } 
+        }
+        
         .navbar {
           position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
           background: ${scrollY > 50 ? 'rgba(10, 10, 15, 0.95)' : 'transparent'};
@@ -401,44 +438,44 @@ const PrudataLandingPage = () => {
           border-bottom: 1px solid ${scrollY > 50 ? 'rgba(255,255,255,0.1)' : 'transparent'};
         }
         .nav-container {
-          max-width: 1200px; margin: 0 auto; padding: 15px 30px; /* Reduced from 1400px and 20px 40px */
+          max-width: 1200px; margin: 0 auto; padding: 15px 30px;
           display: flex; justify-content: space-between; align-items: center;
         }
         .logo h2 {
-          font-size: 1.6rem; font-weight: 800; cursor: pointer; /* Reduced from 2rem */
-          background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%); /* White gradient */
+          font-size: 1.6rem; font-weight: 800; cursor: pointer;
+          background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
           -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .nav-menu { display: flex; gap: 30px; align-items: center; } /* Reduced from 40px */
+        .nav-menu { display: flex; gap: 30px; align-items: center; }
         .nav-menu a {
-          color: #fff; text-decoration: none; font-weight: 500; font-size: 0.9rem; /* Reduced from 0.95rem */
+          color: #fff; text-decoration: none; font-weight: 500; font-size: 0.9rem;
           transition: all 0.3s ease; position: relative;
         }
         .nav-menu a:not(.cta-button):hover { color: #ffffff; }
         .nav-menu a:not(.cta-button)::after {
           content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px;
-          background: linear-gradient(90deg, #ffffff, #cccccc); /* White gradient */
+          background: linear-gradient(90deg, #ffffff, #cccccc);
           transition: width 0.3s ease;
         }
         .nav-menu a:not(.cta-button):hover::after { width: 100%; }
         .cta-button {
-          padding: 10px 22px !important; border-radius: 8px; font-weight: 600 !important; /* Reduced from 12px 28px */
-          background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%) !important; /* White gradient */
-          color: #000000 !important; /* Black text for contrast */
-          box-shadow: 0 3px 12px rgba(255, 255, 255, 0.4); transition: all 0.3s ease !important; /* Reduced shadow */
+          padding: 10px 22px !important; border-radius: 8px; font-weight: 600 !important;
+          background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%) !important;
+          color: #000000 !important;
+          box-shadow: 0 3px 12px rgba(255, 255, 255, 0.4); transition: all 0.3s ease !important;
         }
         .cta-button:hover {
-          transform: translateY(-2px); box-shadow: 0 5px 20px rgba(255, 255, 255, 0.6); /* Reduced shadow */
-          background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%) !important; /* Solid white on hover */
+          transform: translateY(-2px); box-shadow: 0 5px 20px rgba(255, 255, 255, 0.6);
+          background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%) !important;
         }
         
         .hamburger { display: none; flex-direction: column; cursor: pointer; gap: 4px; }
-        .hamburger span { width: 22px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.3s ease; } /* Reduced size */
+        .hamburger span { width: 22px; height: 2px; background: #fff; border-radius: 2px; transition: all 0.3s ease; }
         
         @media (max-width: 768px) {
           .hamburger { display: flex; }
           .nav-menu {
-            position: fixed; top: 60px; left: 0; right: 0; flex-direction: column; /* Reduced from 70px */
+            position: fixed; top: 60px; left: 0; right: 0; flex-direction: column;
             background: rgba(10, 10, 15, 0.98); padding: 15px; gap: 15px;
             transform: translateY(${isMenuOpen ? '0' : '-100%'});
             opacity: ${isMenuOpen ? '1' : '0'}; transition: all 0.3s ease;
@@ -450,7 +487,7 @@ const PrudataLandingPage = () => {
         }
         
         .hero {
-          padding: 140px 30px 80px; background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%); /* Reduced padding */
+          padding: 140px 30px 80px; background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
           position: relative; overflow: hidden;
         }
         .hero::before {
@@ -460,116 +497,116 @@ const PrudataLandingPage = () => {
           pointer-events: none;
         }
         .hero-container {
-          max-width: 1200px; margin: 0 auto; display: grid; /* Reduced from 1400px */
-          grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; position: relative; z-index: 1; /* Reduced from 80px */
+          max-width: 1200px; margin: 0 auto; display: grid;
+          grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; position: relative; z-index: 1;
         }
         .hero-content { animation: slideInLeft 1s ease-out; }
         .hero h1 {
-          font-size: 2.8rem; font-weight: 800; line-height: 1.2; margin-bottom: 25px; /* Reduced from 3.5rem */
-          background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%); /* White gradient */
+          font-size: 2.8rem; font-weight: 800; line-height: 1.2; margin-bottom: 25px;
+          background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
           -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         .hero p { 
-          font-size: 1.1rem; color: rgba(255,255,255,0.8); line-height: 1.7; margin-bottom: 35px; /* Reduced from 1.25rem */
+          font-size: 1.1rem; color: rgba(255,255,255,0.8); line-height: 1.7; margin-bottom: 35px;
         }
         .hero-cta {
-          padding: 15px 35px; font-size: 1rem; font-weight: 600; border: none; border-radius: 10px; /* Reduced from 18px 40px */
-          background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%); /* White gradient */
-          color: #000000; /* Black text for contrast */
-          cursor: pointer; box-shadow: 0 8px 25px rgba(255, 255, 255, 0.4); transition: all 0.3s ease; /* Reduced shadow */
+          padding: 15px 35px; font-size: 1rem; font-weight: 600; border: none; border-radius: 10px;
+          background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
+          color: #000000;
+          cursor: pointer; box-shadow: 0 8px 25px rgba(255, 255, 255, 0.4); transition: all 0.3s ease;
         }
         .hero-cta:hover {
-          transform: translateY(-3px); box-shadow: 0 12px 35px rgba(255, 255, 255, 0.6); /* Reduced shadow */
-          background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%); /* Solid white on hover */
+          transform: translateY(-3px); box-shadow: 0 12px 35px rgba(255, 255, 255, 0.6);
+          background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
         }
         .hero-image { animation: slideInRight 1s ease-out; }
         .hero-image img {
-          width: 100%; height: auto; border-radius: 16px; box-shadow: 0 15px 45px rgba(0,0,0,0.5); /* Reduced shadow */
+          width: 100%; height: auto; border-radius: 16px; box-shadow: 0 15px 45px rgba(0,0,0,0.5);
           animation: float 6s ease-in-out infinite;
         }
         
         @media (max-width: 968px) {
           .hero-container { grid-template-columns: 1fr; gap: 40px; }
-          .hero h1 { font-size: 2.2rem; } /* Reduced from 2.5rem */
+          .hero h1 { font-size: 2.2rem; }
           .hero { padding: 120px 20px 60px; }
         }
         
         @media (max-width: 480px) {
-          .hero h1 { font-size: 1.8rem; } /* Reduced from 2rem */
+          .hero h1 { font-size: 1.8rem; }
           .hero p { font-size: 1rem; }
           .nav-container { padding: 12px 20px; }
-          .logo h2 { font-size: 1.4rem; } /* Reduced from 1.5rem */
+          .logo h2 { font-size: 1.4rem; }
         }
         
         /* Scrolling Animation Classes */
         .section {
-          padding: 80px 30px; position: relative; /* Reduced from 120px 40px */
+          padding: 80px 30px; position: relative;
           opacity: 0; transform: translateY(50px); transition: all 0.8s ease;
         }
         .section.visible {
           opacity: 1; transform: translateY(0);
         }
         
-        .container { max-width: 1200px; margin: 0 auto; } /* Reduced from 1400px */
+        .container { max-width: 1200px; margin: 0 auto; }
         .section h2 {
-          font-size: 2.2rem; font-weight: 800; text-align: center; margin-bottom: 20px; /* Reduced from 2.8rem */
-          background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%); /* White gradient */
+          font-size: 2.2rem; font-weight: 800; text-align: center; margin-bottom: 20px;
+          background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
           -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
         .section-subtitle {
-          text-align: center; font-size: 1.1rem; color: rgba(255,255,255,0.7); /* Reduced from 1.2rem */
-          margin-bottom: 60px; max-width: 700px; margin-left: auto; margin-right: auto; /* Reduced from 80px and 800px */
+          text-align: center; font-size: 1.1rem; color: rgba(255,255,255,0.7);
+          margin-bottom: 60px; max-width: 700px; margin-left: auto; margin-right: auto;
         }
         
         .services-grid {
-          display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 50px; /* Reduced gap and margin */
+          display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 50px;
         }
         .service-card {
           background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(204, 204, 204, 0.1) 100%);
-          padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; /* Reduced padding */
+          padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease;
           opacity: 0; transform: translateY(30px); transition: all 0.6s ease 0.2s;
         }
         .section.visible .service-card {
           opacity: 1; transform: translateY(0);
         }
         .service-card:hover {
-          transform: translateY(-8px); border-color: rgba(255, 255, 255, 0.5); /* Reduced from -10px */
-          box-shadow: 0 15px 35px rgba(255, 255, 255, 0.2); /* Reduced shadow */
+          transform: translateY(-8px); border-color: rgba(255, 255, 255, 0.5);
+          box-shadow: 0 15px 35px rgba(255, 255, 255, 0.2);
         }
-        .service-card h3 { font-size: 1.6rem; font-weight: 700; margin-bottom: 20px; color: #ffffff; } /* Reduced from 1.8rem */
+        .service-card h3 { font-size: 1.6rem; font-weight: 700; margin-bottom: 20px; color: #ffffff; }
         .service-card ul { list-style: none; }
         .service-card li {
-          padding: 10px 0; color: rgba(255,255,255,0.8); font-size: 1rem; /* Reduced from 12px 0 and 1.05rem */
+          padding: 10px 0; color: rgba(255,255,255,0.8); font-size: 1rem;
           border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .service-card li:last-child { border-bottom: none; }
-        .service-card li::before { content: '→'; margin-right: 10px; color: #ffffff; font-weight: bold; } /* Reduced from 12px */
+        .service-card li::before { content: '→'; margin-right: 10px; color: #ffffff; font-weight: bold; }
         
         @media (max-width: 768px) {
           .services-grid { grid-template-columns: 1fr; }
-          .section { padding: 60px 20px; } /* Reduced from 80px 20px */
-          .section h2 { font-size: 1.8rem; } /* Reduced from 2rem */
+          .section { padding: 60px 20px; }
+          .section h2 { font-size: 1.8rem; }
         }
         
         @media (max-width: 480px) {
-          .section h2 { font-size: 1.5rem; } /* Reduced from 1.6rem */
+          .section h2 { font-size: 1.5rem; }
           .section-subtitle { font-size: 1rem; }
-          .service-card { padding: 25px 18px; } /* Reduced from 30px 20px */
+          .service-card { padding: 25px 18px; }
         }
         
         .platform-section {
-          background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0f 100%); padding: 80px 30px; /* Reduced padding */
+          background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0f 100%); padding: 80px 30px;
         }
         .platform-content {
-          display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; /* Reduced from 80px */
+          display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
         }
-        .platform-text h2 { text-align: left; margin-bottom: 25px; } /* Reduced from 30px */
+        .platform-text h2 { text-align: left; margin-bottom: 25px; }
         .platform-text p {
-          font-size: 1.05rem; color: rgba(255,255,255,0.8); line-height: 1.7; margin-bottom: 25px; /* Reduced from 1.15rem */
+          font-size: 1.05rem; color: rgba(255,255,255,0.8); line-height: 1.7; margin-bottom: 25px;
         }
-        .platform-features { display: grid; gap: 20px; } /* Reduced from 25px */
+        .platform-features { display: grid; gap: 20px; }
         .platform-feature {
-          display: flex; align-items: start; gap: 15px; padding: 20px; /* Reduced from 20px and 25px */
+          display: flex; align-items: start; gap: 15px; padding: 20px;
           background: rgba(255, 255, 255, 0.05); border-radius: 12px;
           border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s ease;
           opacity: 0; transform: translateX(-30px); transition: all 0.6s ease;
@@ -583,10 +620,10 @@ const PrudataLandingPage = () => {
         .platform-feature:nth-child(4) { transition-delay: 0.4s; }
         .platform-feature:hover {
           background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.3);
-          transform: translateX(8px); /* Reduced from 10px */
+          transform: translateX(8px);
         }
         .platform-feature-icon { 
-          min-width: 45px; color: #ffffff; /* Reduced from 50px */
+          min-width: 45px; color: #ffffff;
           display: flex; align-items: center; justify-content: center;
         }
         .svg-icon {
@@ -595,11 +632,11 @@ const PrudataLandingPage = () => {
           color: #ffffff;
         }
         .platform-feature-content h4 {
-          font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; color: #ffffff; /* Reduced from 1.3rem */
+          font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; color: #ffffff;
         }
-        .platform-feature-content p { font-size: 0.95rem; color: rgba(255,255,255,0.7); margin: 0; } /* Reduced from 1rem */
+        .platform-feature-content p { font-size: 0.95rem; color: rgba(255,255,255,0.7); margin: 0; }
         .platform-visual img {
-          width: 100%; border-radius: 16px; box-shadow: 0 15px 45px rgba(0,0,0,0.5); /* Reduced shadow */
+          width: 100%; border-radius: 16px; box-shadow: 0 15px 45px rgba(0,0,0,0.5);
         }
         
         @media (max-width: 968px) {
@@ -611,9 +648,9 @@ const PrudataLandingPage = () => {
           .platform-feature-icon { margin: 0 auto; }
         }
         
-        .integrations-section { background: #0a0a0f; padding: 80px 30px; } /* Reduced padding */
+        .integrations-section { background: #0a0a0f; padding: 80px 30px; }
         .integrations-grid {
-          display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 25px; margin-top: 50px; /* Reduced from 200px and 30px */
+          display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 25px; margin-top: 50px;
         }
         
         @media (max-width: 768px) {
@@ -625,7 +662,7 @@ const PrudataLandingPage = () => {
         }
         .integration-card {
           background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
-          padding: 25px 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); /* Reduced padding */
+          padding: 25px 18px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1);
           text-align: center; transition: all 0.3s ease; cursor: pointer;
           opacity: 0; transform: scale(0.9); transition: all 0.6s ease;
         }
@@ -633,14 +670,14 @@ const PrudataLandingPage = () => {
           opacity: 1; transform: scale(1);
         }
         .integration-card:hover {
-          transform: translateY(-8px) scale(1.03); border-color: rgba(255, 255, 255, 0.5); /* Reduced from -10px and 1.05 */
-          box-shadow: 0 12px 35px rgba(255, 255, 255, 0.2); /* Reduced shadow */
+          transform: translateY(-8px) scale(1.03); border-color: rgba(255, 255, 255, 0.5);
+          box-shadow: 0 12px 35px rgba(255, 255, 255, 0.2);
         }
         .integration-logo {
-          width: 70px; height: 70px; margin: 0 auto 18px; background: #fff; border-radius: 14px; /* Reduced from 80px */
+          width: 70px; height: 70px; margin: 0 auto 18px; background: #fff; border-radius: 14px;
           display: flex; align-items: center; justify-content: center;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; /* Reduced shadow */
-          padding: 12px; /* Reduced from 15px */
+          box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden;
+          padding: 12px;
         }
         .integration-logo img { 
           width: 100%; 
@@ -649,15 +686,15 @@ const PrudataLandingPage = () => {
           max-width: 70%;
           max-height: 70%;
         }
-        .integration-card h4 { font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: 8px; } /* Reduced from 1.1rem */
-        .integration-card p { font-size: 0.85rem; color: rgba(255,255,255,0.6); } /* Reduced from 0.9rem */
+        .integration-card h4 { font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: 8px; }
+        .integration-card p { font-size: 0.85rem; color: rgba(255,255,255,0.6); }
         
         .differentiators-grid {
-          display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 30px; margin-top: 50px; /* Reduced from 380px and 40px */
+          display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 30px; margin-top: 50px;
         }
         .differentiator-card {
           background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(204, 204, 204, 0.08) 100%);
-          padding: 35px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.4s ease; /* Reduced padding */
+          padding: 35px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.4s ease;
           opacity: 0; transform: translateY(40px); transition: all 0.6s ease;
         }
         .section.visible .differentiator-card {
@@ -667,39 +704,38 @@ const PrudataLandingPage = () => {
         .differentiator-card:nth-child(2) { transition-delay: 0.2s; }
         .differentiator-card:nth-child(3) { transition-delay: 0.3s; }
         .differentiator-card:hover {
-          transform: translateY(-8px); border-color: rgba(255, 255, 255, 0.5); /* Reduced from -10px */
-          box-shadow: 0 20px 45px rgba(255, 255, 255, 0.3); /* Reduced shadow */
+          transform: translateY(-8px); border-color: rgba(255, 255, 255, 0.5);
+          box-shadow: 0 20px 45px rgba(255, 255, 255, 0.3);
         }
-        /* SVG Icons for differentiator cards - Removed white boxes */
         .differentiator-icon {
-          width: 60px; height: 60px; border-radius: 14px; margin-bottom: 25px; /* Reduced from 70px */
+          width: 60px; height: 60px; border-radius: 14px; margin-bottom: 25px;
           display: flex; align-items: center; justify-content: center;
-          background: transparent; /* Changed from gradient */
+          background: transparent;
         }
         .differentiator-icon svg {
           width: 32px;
           height: 32px;
-          color: #ffffff; /* White icons */
+          color: #ffffff;
         }
-        .differentiator-card h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 18px; color: #fff; } /* Reduced from 1.6rem */
+        .differentiator-card h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 18px; color: #fff; }
         .differentiator-card p {
-          font-size: 1rem; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 25px; /* Reduced from 1.1rem */
+          font-size: 1rem; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 25px;
         }
-        .differentiator-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; } /* Reduced from 20px */
+        .differentiator-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .stat {
-          text-align: center; padding: 18px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; /* Reduced padding */
+          text-align: center; padding: 18px; background: rgba(255, 255, 255, 0.1); border-radius: 10px;
           border: 1px solid rgba(255,255,255,0.05);
         }
         .stat-value {
-          display: block; font-size: 1.8rem; font-weight: 800; margin-bottom: 6px; /* Reduced from 2.2rem */
+          display: block; font-size: 1.8rem; font-weight: 800; margin-bottom: 6px;
           background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
           -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .stat-label { display: block; font-size: 0.85rem; color: rgba(255,255,255,0.6); } /* Reduced from 0.9rem */
+        .stat-label { display: block; font-size: 0.85rem; color: rgba(255,255,255,0.6); }
         
         @media (max-width: 768px) {
           .differentiators-grid { grid-template-columns: 1fr; }
-          .differentiator-card { padding: 25px; } /* Reduced from 30px */
+          .differentiator-card { padding: 25px; }
         }
         
         @media (max-width: 480px) {
@@ -708,11 +744,11 @@ const PrudataLandingPage = () => {
         }
         
         .workflow-grid {
-          display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-top: 50px; /* Reduced from 80px */
+          display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-top: 50px;
         }
-        .workflow-features { display: grid; gap: 25px; } /* Reduced from 30px */
+        .workflow-features { display: grid; gap: 25px; }
         .feature {
-          padding: 25px; background: rgba(255, 255, 255, 0.05); border-radius: 14px; /* Reduced from 30px and 16px */
+          padding: 25px; background: rgba(255, 255, 255, 0.05); border-radius: 14px;
           border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s ease;
           opacity: 0; transform: translateX(-30px); transition: all 0.6s ease;
         }
@@ -724,15 +760,15 @@ const PrudataLandingPage = () => {
         .feature:nth-child(3) { transition-delay: 0.3s; }
         .feature:hover {
           background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.3);
-          transform: translateX(8px); /* Reduced from 10px */
+          transform: translateX(8px);
         }
         .feature h4 { 
-          font-size: 1.3rem; font-weight: 600; margin-bottom: 10px; color: #ffffff; /* Reduced from 1.4rem */
+          font-size: 1.3rem; font-weight: 600; margin-bottom: 10px; color: #ffffff;
           display: flex; align-items: center; gap: 10px;
         }
-        .feature p { font-size: 1rem; color: rgba(255,255,255,0.7); line-height: 1.6; } /* Reduced from 1.05rem */
+        .feature p { font-size: 1rem; color: rgba(255,255,255,0.7); line-height: 1.6; }
         .workflow-image img {
-          width: 100%; border-radius: 16px; box-shadow: 0 15px 45px rgba(0,0,0,0.5); /* Reduced shadow */
+          width: 100%; border-radius: 16px; box-shadow: 0 15px 45px rgba(0,0,0,0.5);
         }
         
         @media (max-width: 968px) {
@@ -741,15 +777,15 @@ const PrudataLandingPage = () => {
         
         @media (max-width: 480px) {
           .feature { padding: 20px; }
-          .feature h4 { font-size: 1.1rem; } /* Reduced from 1.2rem */
+          .feature h4 { font-size: 1.1rem; }
         }
         
         .process-steps {
-          display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Reduced from 280px */
-          gap: 25px; margin-top: 50px; margin-bottom: 50px; /* Reduced from 30px and 60px */
+          display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 25px; margin-top: 50px; margin-bottom: 50px;
         }
         .step {
-          padding: 30px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(204, 204, 204, 0.08) 100%); /* Reduced padding */
+          padding: 30px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(204, 204, 204, 0.08) 100%);
           border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);
           text-align: center; transition: all 0.3s ease; position: relative;
           opacity: 0; transform: translateY(40px); transition: all 0.6s ease;
@@ -762,19 +798,19 @@ const PrudataLandingPage = () => {
         .step:nth-child(3) { transition-delay: 0.3s; }
         .step:nth-child(4) { transition-delay: 0.4s; }
         .step::before {
-          content: ''; position: absolute; top: 50%; right: -12px; width: 25px; height: 2px; /* Reduced from -15px and 30px */
+          content: ''; position: absolute; top: 50%; right: -12px; width: 25px; height: 2px;
           background: linear-gradient(90deg, #ffffff, transparent);
         }
         .step:last-child::before { display: none; }
         .step:hover {
-          transform: translateY(-8px); border-color: rgba(255, 255, 255, 0.5); /* Reduced from -10px */
-          box-shadow: 0 12px 35px rgba(255, 255, 255, 0.2); /* Reduced shadow */
+          transform: translateY(-8px); border-color: rgba(255, 255, 255, 0.5);
+          box-shadow: 0 12px 35px rgba(255, 255, 255, 0.2);
         }
-        .step h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 12px; color: #ffffff; } /* Reduced from 1.5rem */
-        .step p { font-size: 1rem; color: rgba(255,255,255,0.7); line-height: 1.6; } /* Reduced from 1.05rem */
+        .step h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 12px; color: #ffffff; }
+        .step p { font-size: 1rem; color: rgba(255,255,255,0.7); line-height: 1.6; }
         .process-image img {
-          width: 100%; max-width: 700px; margin: 0 auto; display: block; /* Reduced from 800px */
-          border-radius: 16px; box-shadow: 0 15px 45px rgba(0,0,0,0.5); /* Reduced shadow */
+          width: 100%; max-width: 700px; margin: 0 auto; display: block;
+          border-radius: 16px; box-shadow: 0 15px 45px rgba(0,0,0,0.5);
         }
         
         @media (max-width: 768px) {
@@ -783,31 +819,31 @@ const PrudataLandingPage = () => {
         }
         
         .client-showcase {
-          background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0f 100%); padding: 80px 30px; /* Reduced padding */
+          background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0f 100%); padding: 80px 30px;
         }
         .client-showcase-content {
-          display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px; align-items: center; /* Reduced from 80px */
+          display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px; align-items: center;
         }
-        .client-info h2 { text-align: left; margin-bottom: 12px; } /* Reduced from 15px */
-        .client-info h3 { font-size: 2rem; font-weight: 800; color: #ffffff; margin-bottom: 8px; } /* Reduced from 2.5rem */
+        .client-info h2 { text-align: left; margin-bottom: 12px; }
+        .client-info h3 { font-size: 2rem; font-weight: 800; color: #ffffff; margin-bottom: 8px; }
         .client-industry {
-          font-size: 1rem; color: rgba(255,255,255,0.5); margin-bottom: 25px; /* Reduced from 1.1rem and 30px */
+          font-size: 1rem; color: rgba(255,255,255,0.5); margin-bottom: 25px;
           text-transform: uppercase; letter-spacing: 1.5px;
         }
         .client-description {
-          font-size: 1.05rem; color: rgba(255,255,255,0.8); line-height: 1.7; margin-bottom: 35px; /* Reduced from 1.15rem and 40px */
+          font-size: 1.05rem; color: rgba(255,255,255,0.8); line-height: 1.7; margin-bottom: 35px;
         }
-        .client-results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; } /* Reduced from 20px */
+        .client-results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
         .result {
-          text-align: center; padding: 22px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; /* Reduced padding */
+          text-align: center; padding: 22px; background: rgba(255, 255, 255, 0.1); border-radius: 10px;
           border: 1px solid rgba(255,255,255,0.05);
         }
         .result-value {
-          display: block; font-size: 1.7rem; font-weight: 800; margin-bottom: 6px; /* Reduced from 2rem */
+          display: block; font-size: 1.7rem; font-weight: 800; margin-bottom: 6px;
           background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
           -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .result-label { display: block; font-size: 0.85rem; color: rgba(255,255,255,0.6); } /* Reduced from 0.9rem */
+        .result-label { display: block; font-size: 0.85rem; color: rgba(255,255,255,0.6); }
         
         @media (max-width: 968px) {
           .client-showcase-content { grid-template-columns: 1fr; gap: 40px; }
@@ -815,10 +851,10 @@ const PrudataLandingPage = () => {
         }
         
         .carousel-container {
-          position: relative; border-radius: 16px; overflow: hidden; /* Reduced from 20px */
-          box-shadow: 0 15px 45px rgba(0,0,0,0.5); /* Reduced shadow */
+          position: relative; border-radius: 16px; overflow: hidden;
+          box-shadow: 0 15px 45px rgba(0,0,0,0.5);
         }
-        .carousel { position: relative; width: 100%; height: 450px; } /* Reduced from 500px */
+        .carousel { position: relative; width: 100%; height: 450px; }
         .carousel-slides {
           display: flex; height: 100%; transition: transform 0.5s ease-in-out;
         }
@@ -826,40 +862,40 @@ const PrudataLandingPage = () => {
           min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
         }
         .carousel-slide img {
-          width: 100%; height: 100%; object-fit: contain; /* Changed from cover to contain to prevent zoom */
-          background: #000; /* Add black background for letterboxing */
+          width: 100%; height: 100%; object-fit: contain;
+          background: #000;
         }
         .carousel-btn {
           position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
           background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.3); color: #fff;
-          width: 45px; height: 45px; border-radius: 50%; font-size: 1.8rem; /* Reduced from 50px and 2rem */
+          width: 45px; height: 45px; border-radius: 50%; font-size: 1.8rem;
           cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(5px);
         }
         .carousel-btn:hover { background: rgba(0,0,0,0.7); border-color: rgba(255,255,255,0.5); }
-        .carousel-btn-prev { left: 15px; } /* Reduced from 20px */
-        .carousel-btn-next { right: 15px; } /* Reduced from 20px */
+        .carousel-btn-prev { left: 15px; }
+        .carousel-btn-next { right: 15px; }
         .carousel-dots {
-          position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); /* Reduced from 20px */
-          display: flex; gap: 8px; z-index: 10; /* Reduced from 10px */
+          position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%);
+          display: flex; gap: 8px; z-index: 10;
         }
         .carousel-dot {
-          width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.3); /* Reduced from 12px */
+          width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.3);
           border: none; cursor: pointer; transition: all 0.3s ease;
         }
         .carousel-dot.active {
-          background: #fff; transform: scale(1.2); /* Reduced from 1.3 */
+          background: #fff; transform: scale(1.2);
         }
         
-        .action-plan { background: #0a0a0f; padding: 80px 30px; } /* Reduced padding */
+        .action-plan { background: #0a0a0f; padding: 80px 30px; }
         .action-content {
-          display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; /* Reduced from 80px */
+          display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
         }
-        .action-text h2 { text-align: left; margin-bottom: 25px; } /* Reduced from 30px */
+        .action-text h2 { text-align: left; margin-bottom: 25px; }
         .action-text ol {
-          list-style: none; counter-reset: action-counter; display: grid; gap: 25px; /* Reduced from 30px */
+          list-style: none; counter-reset: action-counter; display: grid; gap: 25px;
         }
         .action-text li {
-          counter-increment: action-counter; padding: 25px; background: rgba(255, 255, 255, 0.05); /* Reduced padding */
+          counter-increment: action-counter; padding: 25px; background: rgba(255, 255, 255, 0.05);
           border-radius: 14px; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s ease;
           opacity: 0; transform: translateX(-30px); transition: all 0.6s ease;
         }
@@ -872,71 +908,71 @@ const PrudataLandingPage = () => {
         .action-text li:nth-child(4) { transition-delay: 0.4s; }
         .action-text li:hover {
           background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.3);
-          transform: translateX(8px); /* Reduced from 10px */
+          transform: translateX(8px);
         }
         .action-text li::before {
-          content: counter(action-counter); display: inline-block; width: 36px; height: 36px; /* Reduced from 40px */
+          content: counter(action-counter); display: inline-block; width: 36px; height: 36px;
           background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%); border-radius: 50%;
-          text-align: center; line-height: 36px; margin-right: 12px; font-weight: 800; /* Reduced from 40px and 15px */
-          color: #000000; /* Black text for contrast */
+          text-align: center; line-height: 36px; margin-right: 12px; font-weight: 800;
+          color: #000000;
         }
-        .action-text strong { font-size: 1.2rem; color: #ffffff; display: block; margin-bottom: 8px; } /* Reduced from 1.3rem */
-        .action-text p { font-size: 1rem; color: rgba(255,255,255,0.7); line-height: 1.6; margin: 0; } /* Reduced from 1.05rem */
+        .action-text strong { font-size: 1.2rem; color: #ffffff; display: block; margin-bottom: 8px; }
+        .action-text p { font-size: 1rem; color: rgba(255,255,255,0.7); line-height: 1.6; margin: 0; }
         .action-image img {
-          width: 100%; border-radius: 16px; box-shadow: 0 15px 45px rgba(0,0,0,0.5); /* Reduced shadow */
+          width: 100%; border-radius: 16px; box-shadow: 0 15px 45px rgba(0,0,0,0.5);
         }
         
         @media (max-width: 968px) {
           .action-content { grid-template-columns: 1fr; gap: 40px; }
         }
         
-        .contact { background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0f 100%); padding: 80px 30px; } /* Reduced padding */
+        .contact { background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0f 100%); padding: 80px 30px; }
         .contact-subtitle {
-          text-align: center; font-size: 1.1rem; color: rgba(255,255,255,0.7); margin-bottom: 50px; /* Reduced from 1.2rem and 60px */
+          text-align: center; font-size: 1.1rem; color: rgba(255,255,255,0.7); margin-bottom: 50px;
         }
         .contact-content {
-          display: grid; grid-template-columns: 1fr 1.5fr; gap: 50px; max-width: 1100px; margin: 0 auto; /* Reduced from 60px and 1200px */
+          display: grid; grid-template-columns: 1fr 1.5fr; gap: 50px; max-width: 1100px; margin: 0 auto;
         }
         .contact-info {
-          background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 16px; /* Reduced padding */
+          background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 16px;
           border: 1px solid rgba(255,255,255,0.1);
         }
-        .contact-info h3 { font-size: 1.8rem; font-weight: 700; margin-bottom: 25px; color: #ffffff; } /* Reduced from 2rem and 30px */
-        .contact-details { display: grid; gap: 15px; } /* Reduced from 20px */
+        .contact-info h3 { font-size: 1.8rem; font-weight: 700; margin-bottom: 25px; color: #ffffff; }
+        .contact-details { display: grid; gap: 15px; }
         .contact-item {
-          padding: 18px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; /* Reduced padding */
+          padding: 18px; background: rgba(255, 255, 255, 0.05); border-radius: 10px;
           border: 1px solid rgba(255,255,255,0.05);
         }
         .contact-item strong {
-          display: block; font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-bottom: 6px; /* Reduced from 0.9rem and 8px */
+          display: block; font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-bottom: 6px;
           text-transform: uppercase; letter-spacing: 1px;
         }
-        .contact-item span { font-size: 1rem; color: #fff; font-weight: 500; } /* Reduced from 1.1rem */
+        .contact-item span { font-size: 1rem; color: #fff; font-weight: 500; }
         
-        .contact-form { display: grid; gap: 15px; } /* Reduced from 20px */
+        .contact-form { display: grid; gap: 15px; }
         .form-group { position: relative; }
         .form-group input,
         .form-group textarea {
-          width: 100%; padding: 14px 18px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); /* Reduced padding */
-          border-radius: 10px; color: #fff; font-size: 0.95rem; font-family: 'Inter', sans-serif; /* Reduced from 1rem */
+          width: 100%; padding: 14px 18px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 10px; color: #fff; font-size: 0.95rem; font-family: 'Inter', sans-serif;
           transition: all 0.3s ease;
         }
         .form-group input:focus,
         .form-group textarea:focus {
           outline: none; border-color: #ffffff; background: rgba(255,255,255,0.08);
-          box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1); /* Reduced from 3px */
+          box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
         }
-        .form-group textarea { resize: vertical; min-height: 110px; } /* Reduced from 120px */
+        .form-group textarea { resize: vertical; min-height: 110px; }
         .form-group input::placeholder,
         .form-group textarea::placeholder { color: rgba(255,255,255,0.4); }
         
         .submit-btn {
-          padding: 16px 35px; font-size: 1rem; font-weight: 600; border: none; border-radius: 10px; /* Reduced from 18px 40px and 12px */
+          padding: 16px 35px; font-size: 1rem; font-weight: 600; border: none; border-radius: 10px;
           background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%); color: #000000;
-          cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 25px rgba(255, 255, 255, 0.4); /* Reduced shadow */
+          cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 25px rgba(255, 255, 255, 0.4);
         }
         .submit-btn:hover:not(:disabled) {
-          transform: translateY(-3px); box-shadow: 0 12px 35px rgba(255, 255, 255, 0.6); /* Reduced shadow */
+          transform: translateY(-3px); box-shadow: 0 12px 35px rgba(255, 255, 255, 0.6);
           background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
         }
         .submit-btn:disabled {
@@ -944,7 +980,7 @@ const PrudataLandingPage = () => {
         }
         
         .form-message {
-          padding: 14px 18px; border-radius: 10px; font-size: 0.95rem; font-weight: 500; /* Reduced padding and font */
+          padding: 14px 18px; border-radius: 10px; font-size: 0.95rem; font-weight: 500;
           animation: fadeInUp 0.3s ease;
         }
         .form-message.success {
@@ -955,59 +991,59 @@ const PrudataLandingPage = () => {
         }
         
         @media (max-width: 968px) {
-          .contact-content { grid-template-columns: 1fr; gap: 35px; } /* Reduced from 40px */
+          .contact-content { grid-template-columns: 1fr; gap: 35px; }
         }
         
         .footer {
-          background: #0a0a0f; padding: 50px 30px 25px; border-top: 1px solid rgba(255,255,255,0.1); /* Reduced padding */
+          background: #0a0a0f; padding: 50px 30px 25px; border-top: 1px solid rgba(255,255,255,0.1);
         }
         .footer-content {
-          max-width: 1200px; margin: 0 auto; display: grid; /* Reduced from 1400px */
-          grid-template-columns: 2fr 1fr; gap: 50px; margin-bottom: 35px; /* Reduced from 60px and 40px */
+          max-width: 1200px; margin: 0 auto; display: grid;
+          grid-template-columns: 2fr 1fr; gap: 50px; margin-bottom: 35px;
         }
         .footer-brand h3 {
-          font-size: 1.8rem; font-weight: 800; margin-bottom: 12px; /* Reduced from 2rem and 15px */
+          font-size: 1.8rem; font-weight: 800; margin-bottom: 12px;
           background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
           -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .footer-brand p { font-size: 0.95rem; color: rgba(255,255,255,0.6); line-height: 1.6; } /* Reduced from 1rem */
-        .footer-links { display: flex; flex-wrap: wrap; gap: 25px; align-items: start; } /* Reduced from 30px */
+        .footer-brand p { font-size: 0.95rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+        .footer-links { display: flex; flex-wrap: wrap; gap: 25px; align-items: start; }
         .footer-links a {
           color: rgba(255,255,255,0.7); text-decoration: none; font-weight: 500;
           transition: all 0.3s ease;
         }
         .footer-links a:hover { color: #ffffff; }
         .footer-bottom {
-          max-width: 1200px; margin: 0 auto; padding-top: 25px; /* Reduced from 1400px and 30px */
+          max-width: 1200px; margin: 0 auto; padding-top: 25px;
           border-top: 1px solid rgba(255,255,255,0.05); text-align: center;
         }
-        .footer-bottom p { color: rgba(255,255,255,0.5); font-size: 0.9rem; } /* Reduced from 0.95rem */
+        .footer-bottom p { color: rgba(255,255,255,0.5); font-size: 0.9rem; }
         
         @media (max-width: 768px) {
-          .footer-content { grid-template-columns: 1fr; gap: 25px; } /* Reduced from 30px */
-          .footer-links { flex-direction: column; gap: 12px; } /* Reduced from 15px */
+          .footer-content { grid-template-columns: 1fr; gap: 25px; }
+          .footer-links { flex-direction: column; gap: 12px; }
         }
       `}</style>
 
       {isLoading && (
         <div className="loading-screen">
-  <div className="loading-logo">
-    <div className="logo-container">
-      <img 
-        src={`${process.env.PUBLIC_URL}/logo192.png`} 
-        alt="Prudata Logo" 
-        className="loading-logo-image"
-      />
-    </div>
-    <h1>Prudata</h1>
-    <div className="loading-subtitle">Where Ideas Meet Impact – Launch Smarter, Grow Faster</div>
-  </div>
-  <div className="spinner"></div>
-  <div className="loading-progress">
-    <div className="loading-progress-bar" style={{ width: `${loadingProgress}%` }}></div>
-  </div>
-  <div className="loading-percentage">{Math.min(100, Math.round(loadingProgress))}%</div>
-</div>
+          <div className="loading-logo">
+            <div className="logo-container">
+              <img 
+                src={`${process.env.PUBLIC_URL}/logo192.png`} 
+                alt="Prudata Logo" 
+                className="loading-logo-image"
+              />
+            </div>
+            <h1>Prudata</h1>
+            <div className="loading-subtitle">Where Ideas Meet Impact – Launch Smarter, Grow Faster</div>
+          </div>
+          <div className="spinner"></div>
+          <div className="loading-progress">
+            <div className="loading-progress-bar" style={{ width: `${loadingProgress}%` }}></div>
+          </div>
+          <div className="loading-percentage">{Math.min(100, Math.round(loadingProgress))}%</div>
+        </div>
       )}
 
       {!isLoading && (
@@ -1193,9 +1229,7 @@ const PrudataLandingPage = () => {
               </p>
               <div className="differentiators-grid">
                 <div className="differentiator-card">
-                  <div className="differentiator-icon">
-                  
-                  </div>
+                  <div className="differentiator-icon"></div>
                   <h3>End-to-End Research & Talent Orchestration</h3>
                   <p>
                     Unified platform seamlessly integrating Research Management, Fellowship Programs, Grant Lifecycle Management, and Mentor Networks. Our solution accelerates research outcomes by 40% while improving talent matching by 75%.
@@ -1212,9 +1246,7 @@ const PrudataLandingPage = () => {
                   </div>
                 </div>
                 <div className="differentiator-card">
-                  <div className="differentiator-icon">
-                   
-                  </div>
+                  <div className="differentiator-icon"></div>
                   <h3>Comprehensive Startup & Investor Ecosystem</h3>
                   <p>
                     Complete ecosystem connecting startups, investors, and accelerators through Portfolio Management and Real-time Analytics. Our platform has helped startups achieve 50% higher success rates and deliver 3.5x ROI growth for investors.
@@ -1231,9 +1263,7 @@ const PrudataLandingPage = () => {
                   </div>
                 </div>
                 <div className="differentiator-card">
-                  <div className="differentiator-icon">
-                    
-                  </div>
+                  <div className="differentiator-icon"></div>
                   <h3>Dynamic Learning & Community Platform</h3>
                   <p>
                     Thriving ecosystems combining Learning Management, Community Engagement, Alumni Networks, and Communication Tools. Our platforms consistently achieve 85% engagement rates and 90% retention across educational and professional communities.
@@ -1554,7 +1584,7 @@ const PrudataLandingPage = () => {
                   <a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>Contact</a>
                 </div>
               </div>
-                          <div className="footer-bottom">
+              <div className="footer-bottom">
                 <p>&copy; {new Date().getFullYear()} Prudata Technologies Private Limited. All rights reserved. | Privacy Policy | Terms of Service</p>
                 <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8rem', marginTop: '8px' }}>
                   ISO 27001 Certified | GDPR Compliant | SOC 2 Type II Certified
@@ -1609,6 +1639,5 @@ const App = () => {
     </Router>
   );
 };
-
 
 export default App;
