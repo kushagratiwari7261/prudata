@@ -635,7 +635,7 @@ const LandingPage = () => {
             <div className="contact-info-panel">
               <div className="section-tag">Contact Office</div>
               <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#ffffff', marginBottom: '16px' }}>Schedule a Consultation</h2>
-              <a href="https://wa.me/6299348672" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+              <a href="https://wa.me/916299348672" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                 <div className="contact-item hover-contact-item">
                   <div className="contact-icon-wrap" style={{ color: '#25D366', background: 'rgba(37, 211, 102, 0.15)' }}><Icon name="whatsapp" size={20} /></div>
                   <div><div style={{ fontWeight: '700', color: '#ffffff' }}>Amrit Kumar Sinha</div><div style={{ color: '#25D366' }}>6299348672 (WhatsApp)</div></div>
