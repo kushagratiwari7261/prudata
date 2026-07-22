@@ -17,7 +17,9 @@ const Icon = ({ name, size = 20, color = 'currentColor' }) => {
     user: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>,
     mail: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>,
     mapPin: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>,
-    externalLink: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg>
+    externalLink: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg>,
+    whatsapp: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></svg>,
+    linkedin: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" /></svg>
   };
   return icons[name] || null;
 };
@@ -633,14 +635,24 @@ const LandingPage = () => {
             <div className="contact-info-panel">
               <div className="section-tag">Contact Office</div>
               <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#ffffff', marginBottom: '16px' }}>Schedule a Consultation</h2>
-              <div className="contact-item">
-                <div className="contact-icon-wrap"><Icon name="user" size={20} /></div>
-                <div><div style={{ fontWeight: '700', color: '#ffffff' }}>Amrit Kumar Sinha</div><div style={{ color: 'var(--accent-blue)' }}>+91 6299348672</div></div>
-              </div>
-              <div className="contact-item">
-                <div className="contact-icon-wrap"><Icon name="mail" size={20} /></div>
-                <div><div style={{ fontWeight: '700', color: '#ffffff' }}>Direct Email</div><div style={{ color: 'var(--text-secondary)' }}>prudata.tech@gmail.com</div></div>
-              </div>
+              <a href="https://wa.me/916299348672" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                <div className="contact-item hover-contact-item">
+                  <div className="contact-icon-wrap" style={{ color: '#25D366', background: 'rgba(37, 211, 102, 0.15)' }}><Icon name="whatsapp" size={20} /></div>
+                  <div><div style={{ fontWeight: '700', color: '#ffffff' }}>Amrit Kumar Sinha</div><div style={{ color: '#25D366' }}>+91 6299348672 (WhatsApp)</div></div>
+                </div>
+              </a>
+              <a href="mailto:prudata.tech@gmail.com" style={{ textDecoration: 'none' }}>
+                <div className="contact-item hover-contact-item">
+                  <div className="contact-icon-wrap"><Icon name="mail" size={20} /></div>
+                  <div><div style={{ fontWeight: '700', color: '#ffffff' }}>Direct Email</div><div style={{ color: 'var(--text-secondary)' }}>prudata.tech@gmail.com</div></div>
+                </div>
+              </a>
+              <a href="https://www.linkedin.com/in/prudata-technologies-2443a2394/" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                <div className="contact-item hover-contact-item">
+                  <div className="contact-icon-wrap" style={{ color: '#0077b5', background: 'rgba(0, 119, 181, 0.15)' }}><Icon name="linkedin" size={20} /></div>
+                  <div><div style={{ fontWeight: '700', color: '#ffffff' }}>Prudata Technologies</div><div style={{ color: '#0077b5' }}>LinkedIn Profile</div></div>
+                </div>
+              </a>
             </div>
             <div className="contact-form-panel">
               {formMessage.text && <div className={`form-alert ${formMessage.type}`}>{formMessage.text}</div>}

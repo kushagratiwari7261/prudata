@@ -1330,6 +1330,19 @@ body {
   margin-bottom: 28px;
 }
 
+.hover-contact-item {
+  transition: transform 0.3s ease, background 0.3s ease;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  margin-left: -12px;
+  margin-right: -12px;
+}
+
+.hover-contact-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+  transform: translateX(5px);
+}
+
 .contact-icon-wrap {
   width: 44px;
   height: 44px;
