@@ -1,0 +1,20 @@
+{
+  "short_name": "Prudatta",
+  "name": "Prudatta - SaaS Solutions and Digital Transformation",
+  "icons": [
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "150x150"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png", 
+      "sizes": "150x150"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
