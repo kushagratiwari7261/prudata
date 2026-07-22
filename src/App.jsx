@@ -4,7 +4,7 @@ import AdminDashboard from './components/AdminDashboard';
 import { apiService } from './services/api';
 import { useParallaxScroll } from './hooks/useParallax';
 import './App.css';
-import Lenis from '@studio-freight/lenis';
+import Lenis from 'lenis';
 
 // SVG Icon Component
 const Icon = ({ name, size = 20, color = 'currentColor' }) => {
