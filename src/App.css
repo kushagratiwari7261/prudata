@@ -1018,7 +1018,7 @@ body {
 .testimonial-marquee-content {
   display: flex;
   white-space: nowrap;
-  animation: scroll-marquee-reverse 35s linear infinite;
+  animation: scroll-marquee-reverse 60s linear infinite;
   min-width: 200%;
 }
 
@@ -1891,6 +1891,30 @@ textarea.form-control {
 
   .section-padding {
     padding: 60px 0;
+  }
+
+  .platform-card {
+    padding: 24px;
+  }
+  
+  .arch-tabs {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tab-btn {
+    flex: 1 1 auto;
+    text-align: center;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+  }
+  
+  .testimonial-marquee-content {
+    animation-duration: 25s !important;
+  }
+
+  .scrolling-marquee-content {
+    animation-duration: 15s !important;
   }
 }
 

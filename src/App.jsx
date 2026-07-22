@@ -596,7 +596,7 @@ const LandingPage = () => {
 
           {/* Testimonial Marquee */}
           <div className="testimonial-marquee-container" style={{ marginTop: '120px' }}>
-            <div className="testimonial-marquee-content" style={{ animationDuration: '60s' }}>
+            <div className="testimonial-marquee-content">
               <div className="testimonial-group">
                 {testimonials.map((t, idx) => (
                   <div key={`a-${idx}`} className="floating-testimonial" style={{ position: 'relative' }}>
