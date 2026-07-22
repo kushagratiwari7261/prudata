@@ -124,6 +124,8 @@ const ProjectShowcase = ({ title, tag, quote, stats, link, images, mobileImages,
         {lightboxOpen && (
           <div className="lightbox-modal" onClick={() => setLightboxOpen(false)}>
             <button className="lightbox-close" onClick={() => setLightboxOpen(false)}>×</button>
+            <button className="lightbox-nav lightbox-prev" onClick={(e) => { e.stopPropagation(); prevSlide(); }}>‹</button>
+            <button className="lightbox-nav lightbox-next" onClick={(e) => { e.stopPropagation(); nextSlide(); }}>›</button>
             <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
               <img src={`${process.env.PUBLIC_URL}/images/${currentDesktopImage || currentMobileImage}`} alt={`${title} High Resolution ${currentIndex + 1}`} style={{ objectFit: 'contain' }} />
             </div>
