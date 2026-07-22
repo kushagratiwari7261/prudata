@@ -4,6 +4,7 @@ import AdminDashboard from './components/AdminDashboard';
 import { apiService } from './services/api';
 import { useParallaxScroll } from './hooks/useParallax';
 import './App.css';
+import Lenis from '@studio-freight/lenis';
 
 // SVG Icon Component
 const Icon = ({ name, size = 20, color = 'currentColor' }) => {
@@ -25,7 +26,7 @@ const Icon = ({ name, size = 20, color = 'currentColor' }) => {
 const ProjectShowcase = ({ title, tag, quote, stats, link, images, mobileImages, reverse }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  
+
   const currentDesktopImage = images && images.length > 0 ? images[currentIndex] : null;
   const currentMobileImage = mobileImages && mobileImages.length > 0 ? (mobileImages[currentIndex] || mobileImages[0]) : null;
 
@@ -39,7 +40,7 @@ const ProjectShowcase = ({ title, tag, quote, stats, link, images, mobileImages,
     <>
       <div className="seal-showcase-box" style={{ marginBottom: '60px' }}>
         <div className="seal-grid" style={{ direction: reverse ? 'rtl' : 'ltr' }}>
-          
+
           <div style={{ direction: 'ltr' }}>
             <span className="seal-tag">{tag}</span>
             <h3 className="seal-title">{title}</h3>
@@ -96,7 +97,7 @@ const ProjectShowcase = ({ title, tag, quote, stats, link, images, mobileImages,
                 </div>
               )}
             </div>
-            
+
             <div className="seal-controls-bar">
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Hover to scroll, click to expand</span>
               <div style={{ display: 'flex', gap: '8px' }}>
@@ -104,7 +105,7 @@ const ProjectShowcase = ({ title, tag, quote, stats, link, images, mobileImages,
                 <button className="seal-arrow-btn" onClick={nextSlide} title="Next Screen">›</button>
               </div>
             </div>
-            
+
             <div className="seal-thumbs-strip" style={{ overflowX: 'auto', display: 'flex', gap: '8px', paddingBottom: '8px' }}>
               {(images || mobileImages || []).map((_, idx) => {
                 // If there is a desktop image, show that as thumb, else mobile image
@@ -149,13 +150,13 @@ const LoadingScreen = ({ onComplete }) => {
   useEffect(() => {
     let currentPercent = 0;
     const interval = setInterval(() => {
-      const increment = Math.floor(Math.random() * 8) + 2; 
+      const increment = Math.floor(Math.random() * 8) + 2;
       currentPercent += increment;
-      
+
       if (currentPercent >= 100) {
         currentPercent = 100;
         setPercentage(100);
-        setPhase(3); 
+        setPhase(3);
         clearInterval(interval);
         setTimeout(() => setFadingOut(true), 600); // Trigger vault open
         setTimeout(onComplete, 1600); // Wait for flap animation
@@ -168,8 +169,8 @@ const LoadingScreen = ({ onComplete }) => {
           setPhase(Math.max(0, nextPhaseIndex - 1));
         }
       }
-    }, 40); 
-    
+    }, 40);
+
     return () => clearInterval(interval);
   }, [onComplete]);
 
@@ -178,7 +179,7 @@ const LoadingScreen = ({ onComplete }) => {
 
   return (
     <div className={`vault-loading-overlay ${fadingOut ? 'vault-open' : ''}`}>
-      
+
       {/* Left and Right Flaps */}
       <div className="vault-flap flap-left">
         <div className="flap-texture"></div>
@@ -188,22 +189,22 @@ const LoadingScreen = ({ onComplete }) => {
         <div className="flap-texture"></div>
         <div className="flap-edge"></div>
       </div>
-      
+
       {/* Central Hex Core */}
       <div className="vault-core-container">
-         <div className="vault-hex-wrapper">
-           <svg className="vault-hex-svg" viewBox="0 0 100 100">
-             <polygon className="hex-bg" points="50 5, 90 27.5, 90 72.5, 50 95, 10 72.5, 10 27.5" />
-             <polygon className="hex-fill" strokeDashoffset={strokeOffset} points="50 5, 90 27.5, 90 72.5, 50 95, 10 72.5, 10 27.5" />
-           </svg>
-           <div className="vault-percentage">{percentage}%</div>
-         </div>
-         
-         <div className="vault-status-text">
-            <span>{loaderPhases[phase].text}</span>
-         </div>
+        <div className="vault-hex-wrapper">
+          <svg className="vault-hex-svg" viewBox="0 0 100 100">
+            <polygon className="hex-bg" points="50 5, 90 27.5, 90 72.5, 50 95, 10 72.5, 10 27.5" />
+            <polygon className="hex-fill" strokeDashoffset={strokeOffset} points="50 5, 90 27.5, 90 72.5, 50 95, 10 72.5, 10 27.5" />
+          </svg>
+          <div className="vault-percentage">{percentage}%</div>
+        </div>
+
+        <div className="vault-status-text">
+          <span>{loaderPhases[phase].text}</span>
+        </div>
       </div>
-      
+
     </div>
   );
 };
@@ -213,7 +214,7 @@ const LandingPage = () => {
   const scrollY = useParallaxScroll();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [archTab, setArchTab] = useState('infrastructure');
-  
+
   const [formData, setFormData] = useState({ name: '', email: '', company: '', message: '' });
   const [submitting, setSubmitting] = useState(false);
   const [formMessage, setFormMessage] = useState({ type: '', text: '' });
@@ -231,6 +232,31 @@ const LandingPage = () => {
       }
     };
     handleVisitors();
+  }, []);
+
+  // 120 FPS Spring-like Momentum Scroll
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Springy momentum
+      direction: 'vertical',
+      gestureDirection: 'vertical',
+      smooth: true,
+      mouseMultiplier: 1,
+      smoothTouch: false,
+      touchMultiplier: 2,
+      infinite: false,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
   }, []);
 
   const scrollToSection = (id) => {
@@ -257,7 +283,7 @@ const LandingPage = () => {
 
   // Project Images Data
   const sealImages = Array.from({ length: 13 }, (_, i) => `seal${i + 1}.png`);
-  
+
   // Route IQ images mapping
   const routeIqImages = Array.from({ length: 7 }, (_, i) => `route${i + 1}.png`);
   // Re-use the single routeiqmob.jpeg for all 7 screens since it's the only mobile file provided
@@ -365,7 +391,7 @@ const LandingPage = () => {
             <span>Next-Gen Enterprise Cloud & AI Engineering</span>
           </div>
           <h1 className="hero-heading" style={{ maxWidth: '900px', transform: `translateY(${scrollY * 0.12}px)` }}>
-            Where Ideas Meet Impact – <br/><span className="gradient-accent">Launch Smarter, Grow Faster.</span>
+            Where Ideas Meet Impact – <br /><span className="gradient-accent">Launch Smarter, Grow Faster.</span>
           </h1>
           <p className="hero-description" style={{ transform: `translateY(${scrollY * 0.14}px)` }}>
             We design, engineer, and scale high-concurrency cloud architectures, AI pipelines, and mission-critical SaaS platforms for visionary global enterprises.
@@ -382,20 +408,22 @@ const LandingPage = () => {
           </div>
         </div>
 
-        <div className="orbital-container" style={{ transform: `translateY(${scrollY * -0.15}px)` }}>
-          <div className="orbit-center-logo"><img src={`${process.env.PUBLIC_URL}/logo192.png`} alt="Prudata" /></div>
-          <div className="orbit-track orbit-track-1">
-            <div className="orbit-planet planet-pos-1" title={integrationsArray[0][0]}><img src={integrationsArray[0][1]} alt={integrationsArray[0][0]} /></div>
-            <div className="orbit-planet planet-pos-3" title={integrationsArray[1][0]}><img src={integrationsArray[1][1]} alt={integrationsArray[1][0]} /></div>
-          </div>
-          <div className="orbit-track orbit-track-2">
-            <div className="orbit-planet planet-pos-2" title={integrationsArray[2][0]}><img src={integrationsArray[2][1]} alt={integrationsArray[2][0]} /></div>
-            <div className="orbit-planet planet-pos-4" title={integrationsArray[3][0]}><img src={integrationsArray[3][1]} alt={integrationsArray[3][0]} /></div>
-          </div>
-          <div className="orbit-track orbit-track-3">
-            <div className="orbit-planet planet-pos-1" title={integrationsArray[4][0]}><img src={integrationsArray[4][1]} alt={integrationsArray[4][0]} /></div>
-            <div className="orbit-planet planet-pos-5" title={integrationsArray[5][0]}><img src={integrationsArray[5][1]} alt={integrationsArray[5][0]} /></div>
-            <div className="orbit-planet planet-pos-6" title={integrationsArray[6][0]}><img src={integrationsArray[6][1]} alt={integrationsArray[6][0]} /></div>
+        <div className="orbital-parallax-wrapper" style={{ transform: `translateY(${scrollY * -0.15}px)` }}>
+          <div className="orbital-container">
+            <div className="orbit-center-logo"><img src={`${process.env.PUBLIC_URL}/logo192.png`} alt="Prudata" /></div>
+            <div className="orbit-track orbit-track-1">
+              <div className="orbit-planet planet-pos-1" title={integrationsArray[0][0]}><img src={integrationsArray[0][1]} alt={integrationsArray[0][0]} /></div>
+              <div className="orbit-planet planet-pos-3" title={integrationsArray[1][0]}><img src={integrationsArray[1][1]} alt={integrationsArray[1][0]} /></div>
+            </div>
+            <div className="orbit-track orbit-track-2">
+              <div className="orbit-planet planet-pos-2" title={integrationsArray[2][0]}><img src={integrationsArray[2][1]} alt={integrationsArray[2][0]} /></div>
+              <div className="orbit-planet planet-pos-4" title={integrationsArray[3][0]}><img src={integrationsArray[3][1]} alt={integrationsArray[3][0]} /></div>
+            </div>
+            <div className="orbit-track orbit-track-3">
+              <div className="orbit-planet planet-pos-1" title={integrationsArray[4][0]}><img src={integrationsArray[4][1]} alt={integrationsArray[4][0]} /></div>
+              <div className="orbit-planet planet-pos-5" title={integrationsArray[5][0]}><img src={integrationsArray[5][1]} alt={integrationsArray[5][0]} /></div>
+              <div className="orbit-planet planet-pos-6" title={integrationsArray[6][0]}><img src={integrationsArray[6][1]} alt={integrationsArray[6][0]} /></div>
+            </div>
           </div>
         </div>
       </section>
@@ -438,7 +466,7 @@ const LandingPage = () => {
             </div>
             <div className="arch-tabs">
               <button className={`tab-btn ${archTab === 'infrastructure' ? 'active' : ''}`} onClick={() => setArchTab('infrastructure')}>High Availability Infrastructure</button>
-              <button className={`tab-btn ${archTab === 'security' ? 'active' : ''}`} onClick={() => setArchTab('security')}>Zero Trust Security</button>
+              <button className={`tab-btn ${archTab === 'security' ? 'active' : ''}`} onClick={() => setArchTab('security')}>Trust Security</button>
             </div>
             <div className="arch-grid">
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -510,8 +538,8 @@ const LandingPage = () => {
             <p className="section-subtitle">A deep dive into our highest-performing cloud and AI engineering projects.</p>
           </div>
 
-          <ProjectShowcase 
-            title="Seal Freight Logistics" 
+          <ProjectShowcase
+            title="Seal Freight Logistics"
             tag="Flagship Logistics Engine"
             quote="Transforming legacy supply chains into high-concurrency cloud networks."
             link="https://sealfreight.com/"
@@ -522,8 +550,8 @@ const LandingPage = () => {
             ]}
           />
 
-          <ProjectShowcase 
-            title="Route IQ" 
+          <ProjectShowcase
+            title="Route IQ"
             tag="AI Fleet Intelligence"
             quote="Predictive routing algorithms mapping over 10 million automated logistics miles daily."
             images={routeIqImages}
@@ -535,8 +563,8 @@ const LandingPage = () => {
             ]}
           />
 
-          <ProjectShowcase 
-            title="Zenwair Clothing" 
+          <ProjectShowcase
+            title="Zenwair Clothing"
             tag="E-Commerce Architecture"
             quote="High-conversion digital storefront built for unparalleled performance and aesthetics."
             images={zenwairImages}
@@ -658,8 +686,8 @@ const LandingPage = () => {
       </div>
 
       {/* GO TO TOP FLOATING BUTTON */}
-      <div 
-        className={`go-to-top-btn ${scrollY > 500 ? 'visible' : ''}`} 
+      <div
+        className={`go-to-top-btn ${scrollY > 500 ? 'visible' : ''}`}
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         title="Scroll to Top"
       >
